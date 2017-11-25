@@ -11,7 +11,7 @@ public class Student implements Serializable {
     String name;
     String address;
     int mobile;
-    int guideId;
+
 
     public int getRollNo() {
         return rollNo;
@@ -45,11 +45,4 @@ public class Student implements Serializable {
         this.mobile = mobile;
     }
 
-    public int getGuideId() {
-        return guideId;
-    }
-
-    public void setGuideId(int guideId) {
-        this.guideId = guideId;
-    }
-}
+  }

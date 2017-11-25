@@ -2,8 +2,15 @@ package student.avjlabs.com.student;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import student.avjlabs.com.student.objects.Student;
 
 /**
  * Created by mypoolin on 11/25/2017.
@@ -73,4 +80,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(FeedReaderContract.FeedEntry.TABLE_TEACHER_STUDENTS, null, values);
         db.close(); // Closing database connection
     }
+    public synchronized ArrayList<Student> getAllStudents(Context context) {
+        ArrayList<Student> arrayListStudents = new ArrayList<>();
+        HashSet<String> hashSet = new HashSet<>();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            String query = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_STUDENTS;
+
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    for (int i = 0; i < cursor.getCount(); i++) {
+                        Student student = new Student();
+                        student.setRollNo(cursor.getInt(0));
+                        student.setName(cursor.getString(1));
+                        student.setAddress(cursor.getString(2));
+                        student.setMobile(cursor.getInt(3));
+                        arrayListStudents.add(student);
+                        cursor.moveToNext();
+                    }
+                }
+            }
+            cursor.close();
+        } catch (Exception e) {
+            Log.e(getClass().getName(), e.toString());
+        }
+        //   db.close();
+
+        return arrayListStudents;
+    }
+    //todo: get teacher list
+    //todo: get mapping based on teacher id/student id
 }
